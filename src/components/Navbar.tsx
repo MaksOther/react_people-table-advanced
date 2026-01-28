@@ -1,11 +1,9 @@
-import { NavLink } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import classNames from 'classnames';
 
 export const Navbar = () => {
-  const getActiveClass = ({ isActive }: { isActive: boolean }) =>
-    classNames('navbar-item', {
-      'has-background-grey-lighter': isActive,
-    });
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
 
   return (
     <nav
@@ -16,13 +14,27 @@ export const Navbar = () => {
     >
       <div className="container">
         <div className="navbar-brand">
-          <NavLink className={getActiveClass} to="/">
+          <Link
+            className={classNames('navbar-item', {
+              'has-background-grey-lighter': location.pathname === '/',
+            })}
+            to="/"
+          >
             Home
-          </NavLink>
+          </Link>
 
-          <NavLink className={getActiveClass} to="/people">
+          <Link
+            className={classNames('navbar-item', {
+              'has-background-grey-lighter':
+                location.pathname.startsWith('/people'),
+            })}
+            to={{
+              pathname: '/people',
+              search: searchParams.toString(),
+            }}
+          >
             People
-          </NavLink>
+          </Link>
         </div>
       </div>
     </nav>
